@@ -57,7 +57,7 @@ def ask_chatgpt(full_prompt: str) -> str:
     Kirim prompt ke ChatGPT (gpt-4.1-mini) dan balikan teks jawabannya.
     """
     resp = client.responses.create(
-        model="gpt-5.1",  # bisa diganti "gpt-4.1" kalau mau
+        model="gpt-5.1",
         input=[
             {
                 "role": "system",
@@ -130,21 +130,22 @@ if st.button("Kirim ke ChatGPT"):
 
     # 3. Buat prompt final
     full_prompt = f"""
-    Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis
-    dalam format CSV (dipotong bila terlalu panjang).
-    
-    INSTRUKSI SAYA:
-    {user_instruction}
-    
-    DATA CSV:
-    ```csv
-    {csv_text_short}
-    """.strip()
+Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis
+dalam format CSV (dipotong bila terlalu panjang).
+
+INSTRUKSI SAYA:
+{user_instruction}
+
+DATA CSV:
+```csv
+{csv_text_short}
+```
+""".strip()
 
     # 4. Panggil ChatGPT
-    with st.spinner("Meminta jawaban dari ChatGPT..."):
+    st.info("Meminta jawaban dari ChatGPT...")
     answer = ask_chatgpt(full_prompt)
-    
+
     # 5. Tampilkan jawaban
     st.markdown("### Jawaban ChatGPT")
     st.markdown(answer)
