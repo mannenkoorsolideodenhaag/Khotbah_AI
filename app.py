@@ -130,24 +130,22 @@ if st.button("Kirim ke ChatGPT"):
 
         # 3. Buat prompt final
         full_prompt = f"""
-Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis
-dalam format CSV (dipotong bila terlalu panjang).
-
-INSTRUKSI SAYA:
-{user_instruction}
-
-DATA CSV:
-```csv
-{csv_text_short}
-""".strip()
-    # 4. Panggil ChatGPT
-    with st.spinner("Meminta jawaban dari ChatGPT..."):
-        answer = ask_chatgpt(full_prompt)
-
-    # 5. Tampilkan jawaban
-    st.markdown("### Jawaban ChatGPT")
-    st.markdown(answer)
+        Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis dalam format CSV (dipotong bila terlalu panjang).
+        
+        INSTRUKSI SAYA:
+        {user_instruction}
+        
+        DATA CSV:
+        ```csv
+        {csv_text_short}
+        """.strip()
+        
+        # 4. Panggil ChatGPT
+        with st.spinner("Meminta jawaban dari ChatGPT..."):
+            answer = ask_chatgpt(full_prompt)
+        # 5. Tampilkan jawaban
+        st.markdown("### Jawaban ChatGPT")
+        st.markdown(answer)
 
 except Exception as e:
     st.error(f"Terjadi error: {e}")
-
