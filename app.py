@@ -7,18 +7,19 @@ from openai import OpenAI
 # Konfigurasi dari Secrets
 # =========================
 # Di Streamlit Cloud, set di: Settings -> Secrets
-# Contoh isi secrets:
-# DATABRICKS_SERVER_HOSTNAME = "xxxxx.azuredatabricks.net"
-# DATABRICKS_HTTP_PATH = "/sql/1.0/warehouses/xxxxxx"
+# Contoh isi secrets (JANGAN di code):
+# DATABRICKS_SERVER_HOSTNAME = "dbc-....cloud.databricks.com"
+# DATABRICKS_HTTP_PATH = "/sql/1.0/warehouses/xxxxxxx"
 # DATABRICKS_TOKEN = "dapiXXXXXXXX"
 # OPENAI_API_KEY = "sk-XXXXXXXX"
 
 DATABRICKS_SERVER_HOSTNAME = st.secrets["dbc-b0932e94-bef9.cloud.databricks.com"]
 DATABRICKS_HTTP_PATH = st.secrets["/sql/1.0/warehouses/6c3031561d363a1a"]
 DATABRICKS_TOKEN = st.secrets["dapi123e7cc240dcd8f8f347a42543d77170"]
+OPENAI_API_KEY = st.secrets["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"]
 
-# OpenAI client otomatis pakai OPENAI_API_KEY dari secrets
-client = OpenAI(api_key=st.secrets["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"])
+# OpenAI client
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Batas maksimum karakter CSV yang dikirim ke model
 MAX_CSV_CHARS = 30000
@@ -56,7 +57,7 @@ def ask_chatgpt(full_prompt: str) -> str:
     Kirim prompt ke ChatGPT (gpt-4.1-mini) dan balikan teks jawabannya.
     """
     resp = client.responses.create(
-        model="gpt-5.1",  # bisa diganti "gpt-4.1" kalau mau
+        model="gpt-4.1-mini",  # bisa diganti "gpt-4.1" kalau mau
         input=[
             {
                 "role": "system",
@@ -108,44 +109,42 @@ user_instruction = st.text_area(
 st.markdown("---")
 
 if st.button("Kirim ke ChatGPT"):
-    try:
-        # 1. Ambil data dari Databricks
-        with st.spinner("Mengambil data dari Databricks..."):
-            df = load_khotbah(limit_rows=limit_rows)
+    # 1. Ambil data dari Databricks
+    with st.spinner("Mengambil data dari Databricks..."):
+        df = load_khotbah(limit_rows=limit_rows)
 
-        st.success(f"Berhasil ambil {len(df)} baris dan {len(df.columns)} kolom.")
-        st.subheader("Preview Data (5 baris pertama)")
-        st.dataframe(df.head())
+    st.success(f"Berhasil ambil {len(df)} baris dan {len(df.columns)} kolom.")
+    st.subheader("Preview Data (5 baris pertama)")
+    st.dataframe(df.head())
 
-        # 2. Convert ke CSV dan batasi panjang
-        csv_text = df.to_csv(index=False)
-        if len(csv_text) > MAX_CSV_CHARS:
-            csv_text_short = csv_text[:MAX_CSV_CHARS]
-            st.warning(
-                f"CSV panjangnya {len(csv_text)} karakter. "
-                f"Hanya {MAX_CSV_CHARS} karakter pertama yang dikirim ke model."
-            )
-        else:
-            csv_text_short = csv_text
+    # 2. Convert ke CSV dan batasi panjang
+    csv_text = df.to_csv(index=False)
+    if len(csv_text) > MAX_CSV_CHARS:
+        csv_text_short = csv_text[:MAX_CSV_CHARS]
+        st.warning(
+            f"CSV panjangnya {len(csv_text)} karakter. "
+            f"Hanya {MAX_CSV_CHARS} karakter pertama yang dikirim ke model."
+        )
+    else:
+        csv_text_short = csv_text
 
-        # 3. Buat prompt final
-        full_prompt = f"""
-        Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis dalam format CSV (dipotong bila terlalu panjang).
-        
-        INSTRUKSI SAYA:
-        {user_instruction}
-        
-        DATA CSV:
-        ```csv
-        {csv_text_short}
-        """.strip()
-        
-        # 4. Panggil ChatGPT
-        with st.spinner("Meminta jawaban dari ChatGPT..."):
-            answer = ask_chatgpt(full_prompt)
-        # 5. Tampilkan jawaban
-        st.markdown("### Jawaban ChatGPT")
-        st.markdown(answer)
+    # 3. Buat prompt final
+    full_prompt = f"""
+    Berikut adalah data khotbah dari tabel khotbah.`01_curated`.pdf_khotbah_ai_analysis
+    dalam format CSV (dipotong bila terlalu panjang).
+    
+    INSTRUKSI SAYA:
+    {user_instruction}
+    
+    DATA CSV:
+    ```csv
+    {csv_text_short}
+    """.strip()
 
-except Exception as e:
-    st.error(f"Terjadi error: {e}")
+    # 4. Panggil ChatGPT
+    with st.spinner("Meminta jawaban dari ChatGPT..."):
+    answer = ask_chatgpt(full_prompt)
+    
+    # 5. Tampilkan jawaban
+    st.markdown("### Jawaban ChatGPT")
+    st.markdown(answer)
