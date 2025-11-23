@@ -57,7 +57,7 @@ def ask_chatgpt(full_prompt: str) -> str:
     Kirim prompt ke ChatGPT (gpt-4.1-mini) dan balikan teks jawabannya.
     """
     resp = client.responses.create(
-        model="gpt-4.1-mini",  # bisa diganti "gpt-4.1" kalau mau
+        model="gpt-5.1",  # bisa diganti "gpt-4.1" kalau mau
         input=[
             {
                 "role": "system",
