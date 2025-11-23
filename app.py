@@ -80,7 +80,7 @@ st.set_page_config(page_title="Khotbah AI", layout="wide")
 st.title("GKIN Den Haag Khotbah AI Prompt")
 st.write(
     "Aplikasi AI GKIN Den Haag yang menganalisis seluruh khotbah di GKIN Den Haag"
-    " dari script khotbah mingguan, di store kedalam Databricks, distrukturisasi dan dijawab oleh Open AI ver 5.1."
+    " dari script khotbah mingguan, di store kedalam Databricks, distrukturisasi dan dijawab oleh OpenAI ver 5.1."
 )
 
 # Pilih jumlah baris
