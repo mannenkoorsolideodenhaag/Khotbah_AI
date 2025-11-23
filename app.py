@@ -13,10 +13,10 @@ from openai import OpenAI
 # DATABRICKS_TOKEN = "dapiXXXXXXXX"
 # OPENAI_API_KEY = "sk-XXXXXXXX"
 
-DATABRICKS_SERVER_HOSTNAME = st.secrets["dbc-b0932e94-bef9.cloud.databricks.com"]
-DATABRICKS_HTTP_PATH = st.secrets["/sql/1.0/warehouses/6c3031561d363a1a"]
-DATABRICKS_TOKEN = st.secrets["dapi123e7cc240dcd8f8f347a42543d77170"]
-OPENAI_API_KEY = st.secrets["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"]
+DATABRICKS_SERVER_HOSTNAME = st.secrets["DATABRICKS_SERVER_HOSTNAME"]
+DATABRICKS_HTTP_PATH = st.secrets["DATABRICKS_HTTP_PATH"]
+DATABRICKS_TOKEN = st.secrets["DATABRICKS_TOKEN"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
