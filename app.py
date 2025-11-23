@@ -22,7 +22,7 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Batas maksimum karakter CSV yang dikirim ke model
-MAX_CSV_CHARS = 30000
+MAX_CSV_CHARS = 80000
 
 
 # =========================
