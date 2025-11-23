@@ -54,7 +54,7 @@ def load_khotbah(limit_rows: int = 100) -> pd.DataFrame:
 # =========================
 def ask_chatgpt(full_prompt: str) -> str:
     """
-    Kirim prompt ke ChatGPT (gpt-4.1-mini) dan balikan teks jawabannya.
+    Kirim prompt ke ChatGPT (gpt-5.1) dan balikan teks jawabannya.
     """
     resp = client.responses.create(
         model="gpt-5.1",
@@ -80,7 +80,7 @@ st.set_page_config(page_title="Khotbah AI", layout="wide")
 st.title("GKIN Den Haag Khotbah AI Prompt")
 st.write(
     "Aplikasi AI GKIN Den Haag yang menganalisis seluruh khotbah di GKIN Den Haag"
-    "dari script khotbah mingguan, di store kedalam Databricks, distrukturisasi dan dijawab oleh Open AI ver 5.1."
+    " dari script khotbah mingguan, di store kedalam Databricks, distrukturisasi dan dijawab oleh Open AI ver 5.1."
 )
 
 # Pilih jumlah baris
@@ -101,14 +101,14 @@ default_instruction = (
 )
 
 user_instruction = st.text_area(
-    "Instruksi / Prompt ke ChatGPT",
+    "Instruksi / Prompt ke AI",
     value=default_instruction,
     height=220,
 )
 
 st.markdown("---")
 
-if st.button("Kirim ke ChatGPT"):
+if st.button("Kirim ke AI"):
     # 1. Ambil data dari Databricks
     with st.spinner("Mengambil data dari Databricks..."):
         df = load_khotbah(limit_rows=limit_rows)
@@ -143,9 +143,9 @@ DATA CSV:
 """.strip()
 
     # 4. Panggil ChatGPT
-    st.info("Meminta jawaban dari ChatGPT...")
+    st.info("Meminta jawaban dari AI...")
     answer = ask_chatgpt(full_prompt)
 
     # 5. Tampilkan jawaban
-    st.markdown("### Jawaban ChatGPT")
+    st.markdown("### Jawaban AI")
     st.markdown(answer)
